@@ -7,6 +7,7 @@ import com.example.cookbook.useCase.UseCases
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,6 +21,9 @@ object AppModule {
     fun provideRecipeRef() = Firebase.firestore.collection("recipe")
 
     @Provides
+    fun provideRecipeStorage() = Firebase.storage.reference
+
+    @Provides
     fun provideRecipeRepository(
         recipeRef: CollectionReference
     ): RecipeRepository = RecipeRepositoryImpl(recipeRef)
@@ -30,4 +34,5 @@ object AppModule {
     ) = UseCases(
         getRecipe = GetRecipe(repo)
     )
+
 }

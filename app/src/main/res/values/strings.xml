@@ -1,3 +1,27 @@
 <resources>
     <string name="app_name">Cookbook</string>
+    
+    // Launch Screen
+    <string name="lets">Let’s</string>
+    <string name="cooking">Cooking</string>
+    <string name="find_best_recipies">Find best recipes for cooking</string>
+    <string name="start_cooking">Start cooking</string>
+    <string name="find_best_recipe_with_line_break">Find best recipes\nfor cooking</string>
+
+    // Home Screen
+    <string name="search_hint">Search recipes</string>
+    <string name="popular_category">Popular category</string>
+
+    // Create Recipe Screen
+    <string name="create_recipe">Create recipe</string>
+    <string name="recipe_name">Recipe Name</string>
+    <string name="description">Description</string>
+    <string name="save">Save</string>
+    <string name="item_name">Item Name</string>
+    <string name="amount">Amount</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="add_new_ingredient">Add new ingredient</string>
+    <string name="steps">Steps</string>
+    <string name="step_name">Step description</string>
+    <string name="add_new_step">Add new step</string>
 </resources>

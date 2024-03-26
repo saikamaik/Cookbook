@@ -1,0 +1,124 @@
+package com.example.cookbook.presentation.view.createRecipeScreen
+
+import android.net.Uri
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.cookbook.data.model.Ingredient
+import com.example.cookbook.data.model.RecipeModel
+import com.example.cookbook.domain.RecipeRepository
+import com.example.cookbook.presentation.view.createRecipeScreen.createRecipeUiEvent.CreateRecipeUiEvent
+import com.example.cookbook.presentation.view.createRecipeScreen.createRecipeUiState.CreateRecipeUiState
+import com.google.firebase.storage.StorageReference
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@HiltViewModel
+class CreateRecipeViewModel @Inject constructor(
+    private val imageStorageReference: StorageReference,
+    private val recipeRep: RecipeRepository
+) : ViewModel() {
+
+    private val _uiState: MutableStateFlow<CreateRecipeUiState> =
+        MutableStateFlow(CreateRecipeUiState())
+    var uiState: StateFlow<CreateRecipeUiState> = _uiState
+
+    fun postUiEvent(event: CreateRecipeUiEvent) {
+        when (event) {
+            is CreateRecipeUiEvent.ChangeSelectedTime -> changeSelectedTime(event.time)
+            is CreateRecipeUiEvent.ChangeNameTextValue -> changeNameTextValue(event.name)
+            is CreateRecipeUiEvent.ChangeDescTextValue -> changeDescTextValue(event.desc)
+            is CreateRecipeUiEvent.AddToIngredientList -> addToIngredientList(event.ingredient)
+            is CreateRecipeUiEvent.DeleteFromIngredientList -> deleteFromIngredientList(event.ingredient)
+            is CreateRecipeUiEvent.AddToStepList -> addToStepList(event.step)
+            is CreateRecipeUiEvent.DeleteFromStepList -> deleteFromStepList(event.step)
+            is CreateRecipeUiEvent.ExpandDropDownMenu -> expandDropDownMenu()
+            is CreateRecipeUiEvent.ChangeSelectedMenuItem -> changeSelectedMenuItem(event.item)
+        }
+    }
+
+    private fun deleteFromIngredientList(ingredient: Ingredient) {
+        val newList = _uiState.value.listOfIngredients.toMutableList()
+        newList.remove(ingredient)
+        _uiState.value = _uiState.value.copy(
+            listOfIngredients = newList
+        )
+    }
+
+    private fun addToIngredientList(ingredient: Ingredient) {
+        val newList = _uiState.value.listOfIngredients.toMutableList()
+        newList.add(ingredient)
+        _uiState.value = _uiState.value.copy(
+            listOfIngredients = newList
+        )
+    }
+
+    private fun deleteFromStepList(step: String) {
+        val newList = _uiState.value.listOfSteps.toMutableList()
+        newList.remove(step)
+        _uiState.value = _uiState.value.copy(
+            listOfSteps = newList
+        )
+    }
+
+    private fun addToStepList(step: String) {
+        val newList = _uiState.value.listOfSteps.toMutableList()
+        newList.add(step)
+        _uiState.value = _uiState.value.copy(
+            listOfSteps = newList
+        )
+    }
+
+    fun addPhotoToFirebaseStorage(uri: Uri, recipe: RecipeModel) {
+        val riversRef = imageStorageReference.child("food_images/${uri.lastPathSegment}")
+        val uploadTask = riversRef.putFile(uri)
+
+        uploadTask.addOnFailureListener {
+            // Handle unsuccessful uploads
+        }.addOnSuccessListener { taskSnapshot ->
+            taskSnapshot.storage.downloadUrl.addOnSuccessListener {
+                _uiState.value = _uiState.value.copy(recipeImageUri = it.toString())
+                addRecipe(recipe)
+            }
+        }
+    }
+
+    private fun addRecipe(recipe: RecipeModel) {
+        viewModelScope.launch {
+            recipeRep.addRecipe(
+                RecipeModel(
+                    name = recipe.name,
+                    description = recipe.description,
+                    cookTime = recipe.cookTime,
+                    ingredientsList = recipe.ingredientsList,
+                    stepsList = recipe.stepsList,
+                    imageUrl = _uiState.value.recipeImageUri
+                )
+            )
+        }
+    }
+
+    private fun changeSelectedTime(time: Long) {
+        _uiState.value = _uiState.value.copy(selectedTimeInSeconds = time)
+    }
+
+    private fun changeNameTextValue(name: String) {
+        _uiState.value = _uiState.value.copy(recipeNameTextFieldValue = name)
+    }
+
+    private fun changeDescTextValue(desc: String) {
+        _uiState.value = _uiState.value.copy(recipeDescTextFieldValue = desc)
+    }
+
+    private fun changeSelectedMenuItem(item: String) {
+        _uiState.value = _uiState.value.copy(selectedMenuItem = item)
+    }
+
+    private fun expandDropDownMenu() {
+        _uiState.value =
+            _uiState.value.copy(isDropDownMenuExpanded = !_uiState.value.isDropDownMenuExpanded)
+    }
+
+}
