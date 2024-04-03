@@ -6,8 +6,10 @@ data class RecipeModel (
     @DocumentId val id: String = "",
     var name: String = "",
     var description: String? = "",
-    var ingredientsList: List<Ingredient?> = emptyList(),
+    var ingredientsList: List<Ingredient>? = null,
     val stepsList: List<String?> = emptyList(),
+    val type: String? = "",
     val imageUrl: String? = "",
-    val cookTime: Long? = null
+    val cookTime: Long? = null,
+    val userUid: String = ""
 )

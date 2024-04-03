@@ -12,6 +12,21 @@ sealed class Screen(
         null, null
     )
 
+    object AuthChoice: Screen(
+        route = "auth_choice_screen",
+        null, null
+    )
+
+    object SignIn: Screen(
+        route = "sign_in_screen",
+        null, null
+    )
+
+    object SignUp: Screen(
+        route = "sign_up_screen",
+        null, null
+    )
+
     object Home : Screen(
         route = "home_screen",
         icon_active = R.drawable.ic_bottomnav_home_active,
@@ -32,7 +47,7 @@ sealed class Screen(
 
     object Profile : Screen(
         route = "profile_screen",
-        icon_active = R.drawable.ic_bottomnav_profile_inactive,
+        icon_active = R.drawable.ic_bottomnav_profile_active,
         icon_inactive = R.drawable.ic_bottomnav_profile_inactive
     )
 
@@ -43,7 +58,7 @@ sealed class Screen(
     )
 
     object RecipeInfo : Screen(
-        route = "item-info_screen/",
+        route = "recipe_info_screen",
         null,
         null
     )

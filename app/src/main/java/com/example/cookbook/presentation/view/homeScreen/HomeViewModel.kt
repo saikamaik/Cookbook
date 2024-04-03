@@ -5,9 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.cookbook.data.model.RecipeModel
 import com.example.cookbook.data.model.Response
-import com.example.cookbook.domain.AddRecipeResponse
 import com.example.cookbook.domain.RecipeRepository
 import com.example.cookbook.domain.RecipeResponse
 import com.example.cookbook.presentation.view.homeScreen.uiEvent.HomeUiEvent
@@ -22,7 +20,6 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(private val recipeRep: RecipeRepository) : ViewModel() {
 
     var recipeResponse by mutableStateOf<RecipeResponse>(Response.Loading)
-    var addRecipeResponse by mutableStateOf<AddRecipeResponse>(Response.Success(false))
 
     private val _uiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState())
     var uiState: StateFlow<HomeUiState> = _uiState
@@ -31,6 +28,10 @@ class HomeViewModel @Inject constructor(private val recipeRep: RecipeRepository)
         when (event) {
             is HomeUiEvent.ChangeSelectedTabOption -> onSelectionChange(event.item)
         }
+    }
+
+    init {
+        getRecipe()
     }
 
     private fun onSelectionChange(item: String) {

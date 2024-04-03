@@ -13,6 +13,8 @@ sealed class CreateRecipeUiEvent {
     data class DeleteFromStepList(val step: String): CreateRecipeUiEvent()
     data object ExpandDropDownMenu: CreateRecipeUiEvent()
     data class ChangeSelectedMenuItem(val item: String): CreateRecipeUiEvent()
+    data class ChangeErrorValue(val errorValue: String): CreateRecipeUiEvent()
+    data class ChangeErrorStatus(val value: Boolean) : CreateRecipeUiEvent()
 //    data class ChangeIngredientTextValue(val name: String): CreateRecipeUiEvent()
 //    data class ChangeIngredientAmountValue(val amount: String): CreateRecipeUiEvent()
 

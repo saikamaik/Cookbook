@@ -41,12 +41,14 @@ import com.example.cookbook.R
 import com.example.cookbook.data.model.Ingredient
 import com.example.cookbook.data.model.RecipeModel
 import com.example.cookbook.navigation.Screen
-import com.example.cookbook.presentation.view.common.RecipeImagePickerBox
+import com.example.cookbook.presentation.view.common.ErrorText
+import com.example.cookbook.presentation.view.common.recipe.RecipeImagePickerBox
 import com.example.cookbook.presentation.view.common.TypeDropDownMenu
 import com.example.cookbook.presentation.view.createRecipeScreen.components.IngredientTextField
 import com.example.cookbook.presentation.view.createRecipeScreen.components.StepsTextField
 import com.example.cookbook.presentation.view.createRecipeScreen.createRecipeUiEvent.CreateRecipeUiEvent
 import com.example.cookbook.presentation.view.common.TextHeader
+import com.example.cookbook.presentation.view.common.checkRecipeForError
 import com.example.cookbook.ui.theme.PrimaryRed50
 import com.example.cookbook.ui.theme.TertiaryGray10
 import com.example.cookbook.ui.theme.TertiaryGray30
@@ -104,17 +106,39 @@ fun CreateRecipeScreen(
                 Spacer(modifier = Modifier.weight(1f))
                 TextButton(
                     onClick = {
-                        selectedImageUri?.let {
-                            viewModel.addPhotoToFirebaseStorage(uri = it, RecipeModel(
+                        checkRecipeForError(
+                            RecipeModel(
                                 name = uiState.recipeNameTextFieldValue,
                                 description = uiState.recipeDescTextFieldValue,
                                 ingredientsList = uiState.listOfIngredients,
                                 stepsList = uiState.listOfSteps,
-                                cookTime = uiState.selectedTimeInSeconds
-                            )
-                            )
+                                cookTime = uiState.selectedTimeInSeconds,
+                                type = uiState.selectedMenuItem,
+                                imageUrl = selectedImageUri.toString()
+                            ),
+                            viewModel
+                        )
+                        if (
+                            viewModel.uiState.value.isError
+                        ) {
+                            viewModel.postUiEvent(CreateRecipeUiEvent.ChangeErrorValue("Input cannot be empty"))
+                            viewModel.postUiEvent(CreateRecipeUiEvent.ChangeErrorStatus(false))
+                        } else {
+                            viewModel.postUiEvent(CreateRecipeUiEvent.ChangeErrorValue(""))
+                            selectedImageUri?.let {
+                                viewModel.addPhotoToFirebaseStorage(
+                                    uri = it, RecipeModel(
+                                        name = uiState.recipeNameTextFieldValue,
+                                        description = uiState.recipeDescTextFieldValue,
+                                        ingredientsList = uiState.listOfIngredients,
+                                        stepsList = uiState.listOfSteps,
+                                        cookTime = uiState.selectedTimeInSeconds,
+                                        type = uiState.selectedMenuItem
+                                    )
+                                )
+                            }
+                            navController.navigate(Screen.Home.route)
                         }
-                        navController.navigate(Screen.Home.route)
                     }
                 ) {
                     Text(
@@ -140,6 +164,7 @@ fun CreateRecipeScreen(
                 onValueChange = {
                     viewModel.postUiEvent(CreateRecipeUiEvent.ChangeNameTextValue(it))
                 },
+                isError = uiState.errorText.isNotEmpty(),
                 placeholder = {
                     Text(
                         text = stringResource(id = R.string.recipe_name),
@@ -159,7 +184,12 @@ fun CreateRecipeScreen(
                 modifier = Modifier
                     .focusRequester(focusRequester)
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp)
+            )
+
+            ErrorText(
+                errorText = uiState.errorText,
+                textForCheck = listOf(uiState.recipeNameTextFieldValue),
+                modifier = Modifier.padding(bottom = 6.dp, top = 4.dp)
             )
 
             OutlinedTextField(
@@ -167,6 +197,7 @@ fun CreateRecipeScreen(
                 onValueChange = {
                     viewModel.postUiEvent(CreateRecipeUiEvent.ChangeDescTextValue(it))
                 },
+                isError = uiState.errorText.isNotEmpty(),
                 placeholder = {
                     Text(
                         text = stringResource(id = R.string.description),
@@ -185,7 +216,13 @@ fun CreateRecipeScreen(
                 modifier = Modifier
                     .focusRequester(focusRequester)
                     .fillMaxWidth()
+                    .padding(top = 16.dp)
+            )
 
+            ErrorText(
+                errorText = uiState.errorText,
+                textForCheck = listOf(uiState.recipeDescTextFieldValue),
+                modifier = Modifier.padding(bottom = 6.dp, top = 4.dp)
             )
 
             Row(
@@ -287,7 +324,7 @@ fun CreateRecipeScreen(
                     )
                 },
                 modifier = Modifier
-                    .padding(bottom = 16.dp)
+                    .padding(bottom = 12.dp)
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_plus),
@@ -304,6 +341,20 @@ fun CreateRecipeScreen(
                 )
             }
 
+        }
+
+        item {
+            ErrorText(
+                errorText = uiState.errorText,
+                textForCheck = uiState.listOfIngredients.map {
+                    it.name
+                    it.amount
+                },
+                modifier = Modifier
+            )
+        }
+
+        item {
             TextHeader(
                 header = stringResource(id = R.string.steps),
                 modifier = Modifier.padding(bottom = 16.dp)
@@ -338,6 +389,14 @@ fun CreateRecipeScreen(
                     color = TertiaryGray90
                 )
             }
+        }
+
+        item {
+            ErrorText(
+                errorText = uiState.errorText,
+                textForCheck = uiState.listOfSteps,
+                modifier = Modifier
+            )
         }
 
     }

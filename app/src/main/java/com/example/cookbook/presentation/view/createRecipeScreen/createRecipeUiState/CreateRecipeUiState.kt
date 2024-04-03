@@ -19,6 +19,9 @@ data class CreateRecipeUiState(
     val selectedMenuItem: String = "Salad",
     val isDropDownMenuExpanded: Boolean = false,
 
+    val errorText: String = "",
+    val isError: Boolean = false,
+
     val selectedTimeInSeconds: Long = 60,
     val timePickerState: UseCaseState = UseCaseState(visible = false)
 )

@@ -114,7 +114,5 @@ fun StepsTextField(
                 )
             }
         }
-
     }
-
 }

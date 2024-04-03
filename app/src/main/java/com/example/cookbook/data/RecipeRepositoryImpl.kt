@@ -20,7 +20,7 @@ class RecipeRepositoryImpl @Inject constructor(
         recipeRef.add(recipe).await()
         Response.Success(true)
     } catch (e: Exception) {
-        Response.Failure(e)
+        Response.Failure(e.message)
     }
 
     override fun deleteRecipe(recipe: RecipeModel) {
@@ -34,7 +34,7 @@ class RecipeRepositoryImpl @Inject constructor(
                     val recipe = snapshot.toObjects(RecipeModel::class.java)
                     Response.Success(recipe)
                 } else {
-                    Response.Failure(e)
+                    Response.Failure(e?.message)
                 }
                 trySend(recipeResponse)
             }
@@ -48,7 +48,7 @@ class RecipeRepositoryImpl @Inject constructor(
         recipeRef.document(recipe.name).set(recipe).await()
         Response.Success(true)
     } catch (e: Exception) {
-        Response.Failure(e)
+        Response.Failure(e.message)
     }
 
 }

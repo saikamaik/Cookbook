@@ -9,4 +9,5 @@ plugins {
     id("org.jetbrains.kotlin.android") version "1.8.10" apply false
     id("org.jetbrains.kotlin.jvm") version "1.8.10" apply false
     id("com.google.dagger.hilt.android") version "2.50" apply false
+    id("com.google.firebase.crashlytics") version "2.9.9" apply false
 }

@@ -8,14 +8,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.cookbook.R
 import com.example.cookbook.presentation.view.homeScreen.HomeViewModel
 import com.example.cookbook.presentation.view.common.TextHeader
-import com.example.cookbook.presentation.view.homeScreen.sections.tabs.TabButtonBar
+import com.example.cookbook.presentation.view.common.tabs.TabButtonBar
+import com.example.cookbook.presentation.view.homeScreen.sections.components.RecipeContent
+import com.example.cookbook.presentation.view.common.recipe.Recipes
 
 @Composable
-fun PopularCategory (
-    viewModel: HomeViewModel
+fun PopularCategory(
+    viewModel: HomeViewModel,
+    navHostController: NavHostController
 ) {
 
     val uiState by viewModel.uiState.collectAsState()
@@ -24,15 +28,26 @@ fun PopularCategory (
         "Salad", "Breakfast", "Appetizer", "Noodle"
     )
 
-    Column {
+    Column (
+        modifier = Modifier.padding(bottom = 16.dp)
+    ) {
         TextHeader(
             header = stringResource(id = R.string.popular_category),
-            modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
+            modifier = Modifier.padding(bottom = 16.dp)
         )
         TabButtonBar(
             labels = labels,
             selectedOption = uiState.selectedTabOption,
-            viewModel = viewModel)
+            viewModel = viewModel
+        )
     }
-    
+
+    Recipes(
+        viewModel.recipeResponse,
+        recipeContent = {
+            recipes ->
+        RecipeContent(recipes = recipes, uiState.selectedTabOption, navController = navHostController)
+        }
+    )
+
 }

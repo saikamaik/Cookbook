@@ -8,6 +8,7 @@ import com.example.cookbook.data.model.RecipeModel
 import com.example.cookbook.domain.RecipeRepository
 import com.example.cookbook.presentation.view.createRecipeScreen.createRecipeUiEvent.CreateRecipeUiEvent
 import com.example.cookbook.presentation.view.createRecipeScreen.createRecipeUiState.CreateRecipeUiState
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CreateRecipeViewModel @Inject constructor(
     private val imageStorageReference: StorageReference,
-    private val recipeRep: RecipeRepository
+    private val recipeRep: RecipeRepository,
+    private val auth: FirebaseAuth
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<CreateRecipeUiState> =
@@ -36,7 +38,17 @@ class CreateRecipeViewModel @Inject constructor(
             is CreateRecipeUiEvent.DeleteFromStepList -> deleteFromStepList(event.step)
             is CreateRecipeUiEvent.ExpandDropDownMenu -> expandDropDownMenu()
             is CreateRecipeUiEvent.ChangeSelectedMenuItem -> changeSelectedMenuItem(event.item)
+            is CreateRecipeUiEvent.ChangeErrorValue -> changeErrorValue(event.errorValue)
+            is CreateRecipeUiEvent.ChangeErrorStatus -> changeErrorStatus(event.value)
         }
+    }
+
+    private fun changeErrorStatus(value: Boolean) {
+        _uiState.value = _uiState.value.copy(isError = value)
+    }
+
+    private fun changeErrorValue(errorValue: String) {
+        _uiState.value = _uiState.value.copy(errorText = errorValue)
     }
 
     private fun deleteFromIngredientList(ingredient: Ingredient) {
@@ -87,16 +99,22 @@ class CreateRecipeViewModel @Inject constructor(
 
     private fun addRecipe(recipe: RecipeModel) {
         viewModelScope.launch {
-            recipeRep.addRecipe(
+            auth.currentUser?.let {
                 RecipeModel(
                     name = recipe.name,
                     description = recipe.description,
                     cookTime = recipe.cookTime,
                     ingredientsList = recipe.ingredientsList,
                     stepsList = recipe.stepsList,
-                    imageUrl = _uiState.value.recipeImageUri
+                    imageUrl = _uiState.value.recipeImageUri,
+                    type = recipe.type,
+                    userUid = it.uid
                 )
-            )
+            }?.let {
+                recipeRep.addRecipe(
+                    it
+                )
+            }
         }
     }
 

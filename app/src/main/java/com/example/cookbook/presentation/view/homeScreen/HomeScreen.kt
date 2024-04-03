@@ -2,87 +2,40 @@ package com.example.cookbook.presentation.view.homeScreen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.example.cookbook.R
+import com.example.cookbook.presentation.view.common.TextHeader4
 import com.example.cookbook.presentation.view.homeScreen.sections.PopularCategory
-import com.example.cookbook.ui.theme.TertiaryGray90
-import com.example.cookbook.ui.theme.Typography
+import com.example.cookbook.presentation.view.homeScreen.sections.RecentCategory
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = hiltViewModel()
+    navHostController: NavHostController
 ) {
 
+    val viewModel: HomeViewModel = hiltViewModel()
+
     Column(
-        modifier = Modifier.padding(start = 24.dp, top = 20.dp)
+        modifier = Modifier
+            .padding(top = 20.dp, bottom = 80.dp, start = 24.dp)
+            .verticalScroll(rememberScrollState())
     ) {
-        Text(
-            text = stringResource(id = R.string.find_best_recipe_with_line_break),
-            style = Typography.bodyLarge,
-            fontWeight = FontWeight.SemiBold,
-            color = TertiaryGray90,
+        TextHeader4(
+            header = stringResource(id = R.string.find_best_recipe_with_line_break),
             modifier = Modifier
-                .align(Alignment.Start)
-                .padding(bottom = 10.dp)
+                .padding(bottom = 16.dp)
         )
         PopularCategory(
-            viewModel = viewModel
+            viewModel = viewModel, navHostController
         )
+        RecentCategory(viewModel = viewModel, navHostController = navHostController)
     }
 
-//    Scaffold(
-//        bottomBar = {
-//            NavigationBar(
-//                containerColor = MaterialTheme.colorScheme.primaryContainer,
-//                contentColor = MaterialTheme.colorScheme.primary,
-//            ) {
-//                Text(
-//                    modifier = Modifier
-//                        .fillMaxWidth(),
-//                    textAlign = TextAlign.Center,
-//                    text = "Bottom app bar",
-//                )
-//            }
-//        },
-//        content = { paddingValues ->
-//            Recipes(
-//                recipeContent = { recipes ->
-//                    RecipeContent(
-//                        padding = paddingValues,
-//                        recipes = recipes
-//                    )
-//                }
-//            )
-//            if (openDialog) {
-//                AddRecipeDialog(
-//                    closeDialog = {
-//                        openDialog = false
-//                    },
-//                    addRecipe = { name, shortDesc ->
-//                        viewModel.addRecipe(
-//                            recipe = RecipeModel(
-//                                name = name, shortDesc = shortDesc
-//                            )
-//                        )
-//                    }
-//                )
-//            }
-//
-//        },
-//        floatingActionButton = {
-//            AddRecipeActionButton(
-//                openDialog = {
-//                    openDialog = true
-//                }
-//            )
-//        }
-//    )
-//    AddRecipe()
 }

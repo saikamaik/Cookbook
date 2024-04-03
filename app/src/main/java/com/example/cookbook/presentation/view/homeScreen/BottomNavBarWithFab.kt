@@ -2,6 +2,7 @@ package com.example.cookbook.presentation.view.homeScreen
 
 //noinspection UsingMaterialAndMaterial3Libraries
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -27,11 +28,13 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.cookbook.navigation.Navigation
 import com.example.cookbook.navigation.Screen
 import com.example.cookbook.ui.theme.PrimaryRed50
+import dagger.hilt.android.qualifiers.ApplicationContext
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun BottomNavBarWithFab(
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    @ApplicationContext context: Context
 ) {
 
     var showBottomBar by rememberSaveable { mutableStateOf(true) }
@@ -40,6 +43,9 @@ fun BottomNavBarWithFab(
     showBottomBar = when (navBackStackEntry?.destination?.route) {
         Screen.Launch.route -> false
         Screen.CreateRecipe.route -> false
+        Screen.AuthChoice.route -> false
+        Screen.SignIn.route -> false
+        Screen.SignUp.route -> false
         else -> true
     }
 
@@ -52,7 +58,7 @@ fun BottomNavBarWithFab(
         }
     )
     {
-        Navigation(navHostController)
+        Navigation(navHostController, context)
     }
 }
 

@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Cookbook</string>
-    
+
     // Launch Screen
     <string name="lets">Let’s</string>
     <string name="cooking">Cooking</string>
@@ -11,6 +11,7 @@
     // Home Screen
     <string name="search_hint">Search recipes</string>
     <string name="popular_category">Popular category</string>
+    <string name="recent_category">Recent category</string>
 
     // Create Recipe Screen
     <string name="create_recipe">Create recipe</string>
@@ -24,4 +25,18 @@
     <string name="steps">Steps</string>
     <string name="step_name">Step description</string>
     <string name="add_new_step">Add new step</string>
+
+    // Bookmark Screen
+    <string name="saved_recipes">Saved recipes</string>
+
+    //Profile
+    <string name="my_profile">My profile</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="recipe">Recipe</string>
+    <string name="title_activity_sign_in_screen">SignInScreen</string>
+
+    //ErrorCodes
+    <string name="wrong_cred">Wrong email or password</string>
+    <string name="enter_valid_cred">Enter a valid email address and password</string>
+    <string name="input_empty">Input cannot be empty</string>
 </resources>
