@@ -25,7 +25,7 @@ fun PopularCategory(
     val uiState by viewModel.uiState.collectAsState()
 
     val labels = listOf(
-        "Salad", "Breakfast", "Appetizer", "Noodle"
+        "Salad", "Breakfast", "Lunch", "Appetizer", "Dessert"
     )
 
     Column (

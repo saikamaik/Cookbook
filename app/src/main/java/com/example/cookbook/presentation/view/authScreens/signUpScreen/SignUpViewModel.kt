@@ -5,11 +5,13 @@ import android.net.Uri
 import android.util.Patterns
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
+import com.example.cookbook.data.model.UserModel
 import com.example.cookbook.presentation.view.authScreens.signUpScreen.signUpUiEvent.SignUpUiEvent
 import com.example.cookbook.presentation.view.authScreens.signUpScreen.signUpUiState.SignUpUiState
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.userProfileChangeRequest
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -20,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val auth: FirebaseAuth,
+    private val userRef: FirebaseFirestore,
     private val imageStorageReference: StorageReference,
     @ApplicationContext val appContext: Context
 ) : ViewModel() {
@@ -37,6 +40,7 @@ class SignUpViewModel @Inject constructor(
                 event.password,
                 event.username
             )
+
             is SignUpUiEvent.ChangeErrorStatus -> changeErrorStatus(event.status)
             is SignUpUiEvent.ChangeUserNameTextValue -> changeUserNameTextValue(event.username)
             is SignUpUiEvent.ChangePasswordVisibility -> changePasswordVisibility()
@@ -132,8 +136,15 @@ class SignUpViewModel @Inject constructor(
                     photoUri = it
                 }
                 auth.currentUser?.updateProfile(profileUpdates)
+
+                userRef.collection("user").add(
+                    UserModel(
+                        auth.currentUser?.uid.toString(),
+                        auth.currentUser?.displayName.toString(),
+                        auth.currentUser?.photoUrl.toString()
+                    )
+                )
             }
         }
     }
-
 }

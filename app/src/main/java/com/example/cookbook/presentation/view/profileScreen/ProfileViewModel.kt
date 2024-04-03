@@ -7,7 +7,7 @@ import com.example.cookbook.data.model.Response
 import com.example.cookbook.data.model.UserModel
 import com.example.cookbook.presentation.view.profileScreen.profileUiState.ProfileUiState
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     val auth: FirebaseAuth,
-    private val recipeRef: CollectionReference
+    private val recipeRef: FirebaseFirestore
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<ProfileUiState> = MutableStateFlow(ProfileUiState())
@@ -29,7 +29,7 @@ class ProfileViewModel @Inject constructor(
     }
 
     private fun getRecipe() = viewModelScope.launch {
-        recipeRef
+        recipeRef.collection("recipe")
             .whereEqualTo("userUid", auth.currentUser?.uid)
             .get()
             .addOnSuccessListener { documents ->
@@ -46,17 +46,18 @@ class ProfileViewModel @Inject constructor(
     private fun getUser() = viewModelScope.launch {
         val currentUser = auth.currentUser
 
+        val userUid = currentUser?.uid.toString()
         val userDisplayName = currentUser?.displayName
         val userPhotoUrl = currentUser?.photoUrl
 
         val userModel: UserModel? = userDisplayName?.let {
             UserModel(
+                userUid,
                 it,
-                userPhotoUrl
+                userPhotoUrl.toString()
             )
         }
         _uiState.value = _uiState.value.copy(user = userModel)
     }
-
 
 }

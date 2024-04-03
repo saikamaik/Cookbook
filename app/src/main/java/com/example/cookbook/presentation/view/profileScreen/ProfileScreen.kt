@@ -20,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -44,8 +43,6 @@ fun ProfileScreen(
     val viewModel: ProfileViewModel = hiltViewModel()
     val uiState = viewModel.uiState.collectAsState()
 
-    val configuration = LocalConfiguration.current
-
     Column {
 
         Column(
@@ -56,7 +53,7 @@ fun ProfileScreen(
                 header = "My profile",
                 modifier = Modifier
                     .align(Alignment.Start)
-                    .padding(bottom = 10.dp)
+                    .padding(bottom = 20.dp)
             )
 
             Row(
@@ -64,7 +61,7 @@ fun ProfileScreen(
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             ) {
                 AsyncImage(
-                    model = uiState.value.user?.profileUrl,
+                    model = uiState.value.user?.imageUrl,
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -89,13 +86,14 @@ fun ProfileScreen(
                 }
             }
 
-            uiState.value.user?.userName?.let {
+            uiState.value.user?.username?.let {
                 Text(
                     text = it,
                     style = Typography.labelMedium,
                     color = TertiaryGray90
                 )
             }
+
         }
 
         HorizontalDivider(
@@ -107,7 +105,8 @@ fun ProfileScreen(
         Recipes(
             uiState.value.recipeResponse,
             recipeContent = { recipes ->
-                UserRecipeContent(recipes = recipes,
+                UserRecipeContent(
+                    recipes = recipes,
                     navHostController = navHostController
                 ) {
 

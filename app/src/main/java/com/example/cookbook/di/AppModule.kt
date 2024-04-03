@@ -1,16 +1,13 @@
 package com.example.cookbook.di
 
 import android.content.Context
-import com.example.cookbook.data.AuthRepositoryImpl
-import com.example.cookbook.data.RecipeRepositoryImpl
+import com.example.cookbook.data.repositoryImplementation.AuthRepositoryImpl
+import com.example.cookbook.data.repositoryImplementation.RecipeRepositoryImpl
 import com.example.cookbook.domain.AuthRepository
 import com.example.cookbook.domain.RecipeRepository
-import com.example.cookbook.useCase.GetRecipe
-import com.example.cookbook.useCase.UseCases
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import dagger.Module
@@ -25,10 +22,7 @@ import javax.inject.Singleton
 object AppModule {
 
     @Provides
-    fun provideRecipeRef() = Firebase.firestore.collection("recipe")
-
-//    @Provides
-//    fun provideSavedRecipesRef() = Firebase.firestore.collection("saved_recipe")
+    fun provideFirebaseRef() = FirebaseFirestore.getInstance()
 
     @Provides
     fun provideRecipeStorage() = Firebase.storage.reference
@@ -37,27 +31,18 @@ object AppModule {
     fun provideAuthRef() = Firebase.auth
 
     @Provides
-    fun provideRecipeRepository(
-        recipeRef: CollectionReference
-    ): RecipeRepository = RecipeRepositoryImpl(recipeRef)
+    fun provideRecipeRepository(): RecipeRepository = RecipeRepositoryImpl(provideFirebaseRef())
 
     @Provides
     fun provideAuthRepository(
         authRef: FirebaseAuth,
         @ApplicationContext appContext: Context
-    ): AuthRepository = AuthRepositoryImpl(authRef, appContext)
+    ): AuthRepository = AuthRepositoryImpl(authRef, provideFirebaseRef(),  appContext)
 
     @Provides
     @Singleton
     fun provideApplicationContext(@ApplicationContext appContext: Context): Context {
         return appContext
     }
-
-    @Provides
-    fun provideUseCases(
-        repo: RecipeRepository
-    ) = UseCases(
-        getRecipe = GetRecipe(repo)
-    )
 
 }

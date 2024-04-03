@@ -39,13 +39,13 @@ fun Navigation(
                 navController
             )
         }
-        composable(Screen.SignIn.route){
+        composable(Screen.SignIn.route) {
             SignInScreen(
                 navController,
                 context
             )
         }
-        composable(Screen.SignUp.route){
+        composable(Screen.SignUp.route) {
             SignUpScreen(
                 navController, context
             )
@@ -77,7 +77,7 @@ fun Navigation(
             })
         ) {
             RecipeInfoScreen(
-
+                navController
             )
         }
     }

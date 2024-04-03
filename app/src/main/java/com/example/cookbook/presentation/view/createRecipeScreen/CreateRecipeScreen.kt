@@ -242,7 +242,7 @@ fun CreateRecipeScreen(
                         .padding(4.dp)
                 )
                 Text(
-                    text = "Cook Time",
+                    text = stringResource(id = R.string.cook_time),
                     style = Typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold
                 )

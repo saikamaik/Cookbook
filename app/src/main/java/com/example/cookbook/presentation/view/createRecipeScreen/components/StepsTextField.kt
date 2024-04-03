@@ -102,6 +102,9 @@ fun StepsTextField(
                     viewModel.postUiEvent(
                         CreateRecipeUiEvent.DeleteFromStepList("")
                     )
+                    viewModel.postUiEvent(
+                        CreateRecipeUiEvent.AddToStepList("")
+                    )
                 },
                 modifier = Modifier
                     .weight(1f)

@@ -14,6 +14,7 @@ interface RecipeRepository {
     suspend fun addRecipe(recipe: RecipeModel): AddRecipeResponse
     fun deleteRecipe(recipe: RecipeModel)
     fun getAllRecipes(): Flow<RecipeResponse>
+    fun getOneRecipe(id: String): Flow<RecipeModel>
     suspend fun updateRecipe(recipe: RecipeModel): UpdateRecipeResponse
 
 }

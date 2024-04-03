@@ -25,6 +25,8 @@
     <string name="steps">Steps</string>
     <string name="step_name">Step description</string>
     <string name="add_new_step">Add new step</string>
+    <string name="cook_time">Cook Time</string>
+    <string name="type_recipe">Type of Recipe</string>
 
     // Bookmark Screen
     <string name="saved_recipes">Saved recipes</string>

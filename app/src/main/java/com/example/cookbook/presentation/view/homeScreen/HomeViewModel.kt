@@ -17,7 +17,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val recipeRep: RecipeRepository) : ViewModel() {
+class HomeViewModel @Inject constructor(
+    private val recipeRep: RecipeRepository
+) : ViewModel() {
 
     var recipeResponse by mutableStateOf<RecipeResponse>(Response.Loading)
 

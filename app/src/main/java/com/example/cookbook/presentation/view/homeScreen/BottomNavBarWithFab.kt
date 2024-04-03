@@ -41,12 +41,11 @@ fun BottomNavBarWithFab(
     val navBackStackEntry by navHostController.currentBackStackEntryAsState()
 
     showBottomBar = when (navBackStackEntry?.destination?.route) {
-        Screen.Launch.route -> false
-        Screen.CreateRecipe.route -> false
-        Screen.AuthChoice.route -> false
-        Screen.SignIn.route -> false
-        Screen.SignUp.route -> false
-        else -> true
+        Screen.Home.route -> true
+        Screen.Profile.route -> true
+        Screen.Bookmark.route -> true
+        Screen.Search.route -> true
+        else -> false
     }
 
     Scaffold(
