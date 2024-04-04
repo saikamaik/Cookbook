@@ -1,6 +1,9 @@
 package com.example.cookbook.data.model
 
+import com.google.firebase.firestore.DocumentId
+
 data class SavedRecipesModel (
-    val userId: Int? = null,
-    val recipeId: Int? = null
+    @DocumentId val id: String = "",
+    val userId: String? = null,
+    val recipeId: String? = null
 )

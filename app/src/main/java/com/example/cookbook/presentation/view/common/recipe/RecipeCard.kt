@@ -39,7 +39,7 @@ import kotlin.time.Duration.Companion.seconds
 fun RecipeCard(
     recipeModel: RecipeModel,
     navController: NavHostController,
-    onClick: () -> Unit
+    onClick: (String) -> Unit
 ) {
 
     val recipeName: String = if (
@@ -108,7 +108,8 @@ fun RecipeCard(
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                Icon(painter = painterResource(id = R.drawable.ic_bottomnav_bookmark_inactive),
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_bottomnav_bookmark_inactive),
                     contentDescription = null,
                     tint = Color.Black,
                     modifier = Modifier
@@ -116,7 +117,7 @@ fun RecipeCard(
                         .background(color = Color.White, shape = CircleShape)
                         .padding(6.dp)
                         .clickable {
-                            onClick()
+                            onClick(recipeModel.id)
                         }
                         .align(Alignment.CenterVertically)
                 )

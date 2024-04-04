@@ -35,7 +35,13 @@ fun HomeScreen(
         PopularCategory(
             viewModel = viewModel, navHostController
         )
-        RecentCategory(viewModel = viewModel, navHostController = navHostController)
+        RecentCategory(
+            viewModel.recipeResponse,
+            navHostController = navHostController,
+            onClick = {recipeId ->
+                viewModel.addRecipeToBookmark(recipeId)
+            }
+        )
     }
 
 }

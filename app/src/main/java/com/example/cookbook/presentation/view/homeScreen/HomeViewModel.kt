@@ -10,6 +10,7 @@ import com.example.cookbook.domain.RecipeRepository
 import com.example.cookbook.domain.RecipeResponse
 import com.example.cookbook.presentation.view.homeScreen.uiEvent.HomeUiEvent
 import com.example.cookbook.presentation.view.homeScreen.uiState.HomeUiState
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,10 +19,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val recipeRep: RecipeRepository
+    private val recipeRep: RecipeRepository,
+    private val auth: FirebaseAuth
 ) : ViewModel() {
 
     var recipeResponse by mutableStateOf<RecipeResponse>(Response.Loading)
+    var bookmarkResponse by mutableStateOf<Response<Boolean>>(Response.Loading)
 
     private val _uiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState())
     var uiState: StateFlow<HomeUiState> = _uiState
@@ -44,6 +47,16 @@ class HomeViewModel @Inject constructor(
         recipeRep.getAllRecipes().collect { response ->
             recipeResponse = response
         }
+    }
+
+    fun addRecipeToBookmark(recipeId: String) = viewModelScope.launch {
+
+        auth.currentUser?.let {
+            recipeRep.addRecipeToBookmark(recipeId, it.uid).collect() { response ->
+                bookmarkResponse = response
+            }
+        }
+
     }
 
 }

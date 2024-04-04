@@ -16,6 +16,7 @@ import com.example.cookbook.presentation.view.homeScreen.HomeScreen
 import com.example.cookbook.presentation.view.launchScreen.LaunchScreen
 import com.example.cookbook.presentation.view.profileScreen.ProfileScreen
 import com.example.cookbook.presentation.view.recipeInfoScreen.RecipeInfoScreen
+import com.example.cookbook.presentation.view.searchScreen.SearchScreen
 import dagger.hilt.android.qualifiers.ApplicationContext
 
 @Composable
@@ -50,6 +51,7 @@ fun Navigation(
                 navController, context
             )
         }
+
         composable(Screen.Home.route) {
             HomeScreen(
                 navController
@@ -66,6 +68,11 @@ fun Navigation(
         }
         composable(Screen.CreateRecipe.route) {
             CreateRecipeScreen(
+                navController
+            )
+        }
+        composable(Screen.Search.route) {
+            SearchScreen(
                 navController
             )
         }

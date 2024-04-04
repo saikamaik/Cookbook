@@ -13,10 +13,11 @@ import com.example.cookbook.domain.Recipes
 import com.example.cookbook.presentation.view.common.recipe.RecipeCard
 
 @Composable
-fun RecipeContent (
+fun RecipeContent(
     recipes: Recipes,
     type: String?,
-    navController: NavHostController
+    navController: NavHostController,
+    onClick: (String) -> Unit
 ) {
 
     LazyRow(
@@ -35,20 +36,19 @@ fun RecipeContent (
                     recipeModel = recipe,
                     navController = navController
                 ) {
-
+                    onClick(it)
+                }
+            }
+        } else {
+            items(items = recipes) { recipe ->
+                RecipeCard(
+                    recipeModel = recipe,
+                    navController
+                ) {
+                    onClick(it)
                 }
             }
         }
-        else {
-        items(items = recipes) { recipe ->
-            RecipeCard(
-                recipeModel = recipe,
-                navController
-            ) {
-
-            }
-        }
     }
-        }
 
-    }
+}

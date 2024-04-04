@@ -31,6 +31,9 @@
     // Bookmark Screen
     <string name="saved_recipes">Saved recipes</string>
 
+    //Search
+    <string name="search_recipe">Search recipes</string>
+
     //Profile
     <string name="my_profile">My profile</string>
     <string name="edit_profile">Edit profile</string>
