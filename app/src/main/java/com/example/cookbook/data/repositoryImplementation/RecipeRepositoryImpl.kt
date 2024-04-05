@@ -126,18 +126,22 @@ class RecipeRepositoryImpl @Inject constructor(
             .addOnSuccessListener { documents ->
                 val savedRecipeList = documents?.toObjects(SavedRecipesModel::class.java)
                 if (savedRecipeList != null) {
-                    val list = savedRecipeList.map {
-                        it.recipeId
-                    }
-                    recipeRef.collection("recipe")
-                        .whereIn(FieldPath.documentId(), list)
-                        .get()
-                        .addOnSuccessListener { recipesDocuments ->
-                            val recipes = recipesDocuments?.toObjects(RecipeModel::class.java)
-                            if (recipes != null) {
-                                trySend(Response.Success(recipes))
-                            }
+                    if (savedRecipeList.isNotEmpty()) {
+                        val list = savedRecipeList.map {
+                            it.recipeId
                         }
+                        recipeRef.collection("recipe")
+                            .whereIn(FieldPath.documentId(), list)
+                            .get()
+                            .addOnSuccessListener { recipesDocuments ->
+                                val recipes = recipesDocuments?.toObjects(RecipeModel::class.java)
+                                if (recipes != null) {
+                                    trySend(Response.Success(recipes))
+                                }
+                            }
+                    } else {
+                        trySend(Response.Failure(e = null))
+                    }
                 }
             }
 

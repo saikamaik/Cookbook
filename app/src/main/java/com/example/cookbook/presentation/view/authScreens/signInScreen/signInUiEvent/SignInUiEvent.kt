@@ -8,6 +8,6 @@ sealed class SignInUiEvent {
     data class ChangeErrorValue(val value: String) : SignInUiEvent()
     data class ChangeSignInResponse(val value: String) : SignInUiEvent()
     data object ChangePasswordVisibility : SignInUiEvent()
-    data class ValidateEmailAndPassword(val email: String, val password: String): SignInUiEvent()
+    data class SignInWithEmail(val email: String, val password: String, val onSuccess: () -> Unit): SignInUiEvent()
 
 }

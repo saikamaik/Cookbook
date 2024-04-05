@@ -208,9 +208,12 @@ fun SignUpScreen(
         CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
             Button(
                 onClick = {
-                    if (viewModel.validateCredentials(uiState.value.emailTextFieldValue,
+                    if (viewModel.validateCredentials(
+                            uiState.value.emailTextFieldValue,
                             uiState.value.passwordTextFieldValue,
-                            uiState.value.userNameTextFieldValue)) {
+                            uiState.value.userNameTextFieldValue
+                        )
+                    ) {
                         viewModel.postUiEvent(
                             SignUpUiEvent.SignUpWithEmail(
                                 uiState.value.emailTextFieldValue,
@@ -240,7 +243,14 @@ fun SignUpScreen(
                         }
                     } else {
                         viewModel.postUiEvent(SignUpUiEvent.ChangeErrorStatus(true))
-                        viewModel.postUiEvent(SignUpUiEvent.ChangeErrorValue(getString(context, R.string.input_empty)))
+                        viewModel.postUiEvent(
+                            SignUpUiEvent.ChangeErrorValue(
+                                getString(
+                                    context,
+                                    R.string.input_empty
+                                )
+                            )
+                        )
                     }
                 },
                 colors = ButtonDefaults.buttonColors(

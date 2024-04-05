@@ -22,7 +22,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,7 +35,6 @@ import androidx.core.content.ContextCompat.getString
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.cookbook.R
-import com.example.cookbook.data.model.Response
 import com.example.cookbook.navigation.Screen
 import com.example.cookbook.presentation.view.authScreens.signInScreen.signInUiEvent.SignInUiEvent
 import com.example.cookbook.presentation.view.common.ErrorText
@@ -46,16 +44,12 @@ import com.example.cookbook.ui.theme.PrimaryRed50
 import com.example.cookbook.ui.theme.TertiaryGray30
 import com.example.cookbook.ui.theme.Typography
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @Composable
 fun SignInScreen(
     navController: NavHostController,
     @ApplicationContext context: Context
 ) {
-
-    val coroutineScope = rememberCoroutineScope()
 
     val viewModel: SignInViewModel = hiltViewModel()
     val uiState = viewModel.uiState.collectAsState()
@@ -164,39 +158,17 @@ fun SignInScreen(
                             uiState.value.passwordTextFieldValue
                         )
                     ) {
-                        coroutineScope.launch(Dispatchers.Main) {
-                            viewModel.signInWithEmail(
-                                uiState.value.emailTextFieldValue.trim(),
-                                uiState.value.passwordTextFieldValue
-                            ).collect {
-                                when (it) {
-                                    is Response.Success -> {
-                                        viewModel.postUiEvent(SignInUiEvent.ChangeErrorStatus(false))
-                                        navController.navigate(Screen.Home.route) {
-                                            popUpTo(Screen.SignIn.route) {
-                                                inclusive = true
-                                            }
-                                        }
-                                    }
-
-                                    is Response.Failure -> {
-                                        Toast.makeText(
-                                            context,
-                                            it.e,
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-
-                                    is Response.Loading -> {
-                                        Toast.makeText(
-                                            context,
-                                            getString(context, R.string.loading),
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
+                        viewModel.postUiEvent(SignInUiEvent.SignInWithEmail(
+                            uiState.value.emailTextFieldValue.trim(),
+                            uiState.value.passwordTextFieldValue
+                        ) {
+                            navController.navigate(Screen.Home.route) {
+                                popUpTo(Screen.SignIn.route) {
+                                    inclusive = true
                                 }
                             }
                         }
+                        )
                     } else {
                         Toast.makeText(
                             context,

@@ -1,18 +1,27 @@
 package com.example.cookbook.presentation.view.authScreens.signInScreen
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.util.Patterns
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.cookbook.data.model.Response
 import com.example.cookbook.domain.AuthRepository
+import com.example.cookbook.domain.SignInResponse
 import com.example.cookbook.presentation.view.authScreens.signInScreen.signInUiEvent.SignInUiEvent
 import com.example.cookbook.presentation.view.authScreens.signInScreen.signInUiState.SignInUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    @ApplicationContext val context: Context
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<SignInUiState> =
@@ -27,10 +36,10 @@ class SignInViewModel @Inject constructor(
             is SignInUiEvent.ChangePasswordVisibility -> changePasswordVisibility()
             is SignInUiEvent.ChangeErrorValue -> changeErrorTextValue(event.value)
             is SignInUiEvent.ChangeSignInResponse -> changeSignInResponse(event.value)
-            is SignInUiEvent.ValidateEmailAndPassword -> emailAndPasswordValidation(
+            is SignInUiEvent.SignInWithEmail -> signInWithEmail(
                 event.email,
                 event.password
-            )
+            ) { event.onSuccess() }
         }
     }
 
@@ -72,6 +81,39 @@ class SignInViewModel @Inject constructor(
         }
     }
 
-    fun signInWithEmail(email: String, password: String) =
-        authRepository.signInWithEmailAndPassword(email, password)
+    private fun signInWithEmail(email: String, password: String, onSuccess: () -> Unit) =
+        viewModelScope.launch {
+            try {
+                authRepository.signInWithEmailAndPassword(email, password).collect {
+                    signInResponseContent(
+                        context,
+                        it,
+                        onSuccess
+                    )
+                }
+            } catch (_: Exception) {
+
+            }
+        }
+
+    private fun signInResponseContent(
+        context: Context,
+        response: SignInResponse,
+        signInContent: () -> Unit
+    ) {
+        when (response) {
+            is Response.Loading -> Toast.makeText(
+                context,
+                "Loading",
+                Toast.LENGTH_SHORT
+            ).show()
+            is Response.Success -> signInContent()
+            is Response.Failure -> Toast.makeText(
+                context,
+                response.e,
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
 }
