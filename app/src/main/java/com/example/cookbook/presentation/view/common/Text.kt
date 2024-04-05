@@ -3,21 +3,35 @@ package com.example.cookbook.presentation.view.common
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
 import com.example.cookbook.ui.theme.TertiaryGray90
 import com.example.cookbook.ui.theme.Typography
 
 @Composable
-fun TextName(
-    recipeName: String
+fun TextMedium(
+    modifier: Modifier = Modifier,
+    text: String,
+    color: Color?,
+    fontWeight: FontWeight? = null
 ) {
-    Text(
-        text = recipeName,
-        color = TertiaryGray90,
-        style = Typography.labelSmall,
-        textDecoration = TextDecoration.Underline
-    )
+    if (color != null) {
+        Text(
+            text = text,
+            style = Typography.bodyMedium,
+            color = color,
+            fontWeight = fontWeight,
+            modifier = modifier
+        )
+    } else {
+        Text(
+            text = text,
+            style = Typography.bodyMedium,
+            color = TertiaryGray90,
+            fontWeight = fontWeight,
+            modifier = modifier
+        )
+    }
 }
 
 @Composable

@@ -1,13 +1,11 @@
 package com.example.cookbook.presentation.view.common
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.cookbook.data.model.RecipeModel
 import com.example.cookbook.presentation.view.createRecipeScreen.CreateRecipeViewModel
 import com.example.cookbook.presentation.view.createRecipeScreen.createRecipeUiEvent.CreateRecipeUiEvent
 import com.example.cookbook.ui.theme.PrimaryRed50
-import com.example.cookbook.ui.theme.Typography
 
 fun checkRecipeForError(
     recipeForCheck: RecipeModel,
@@ -48,10 +46,9 @@ fun ErrorText(
     }
 
     if (isError) {
-        Text(
+        TextMedium(
             text = errorText,
             color = PrimaryRed50,
-            style = Typography.bodyMedium,
             modifier = modifier
         )
     }

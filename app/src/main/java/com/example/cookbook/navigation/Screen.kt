@@ -35,7 +35,7 @@ sealed class Screen(
 
     object Bookmark : Screen(
         route = "bookmark_screen",
-        icon_active = R.drawable.ic_bottomnav_bookmark_inactive,
+        icon_active = R.drawable.ic_bottomnav_bookmark_active,
         icon_inactive = R.drawable.ic_bottomnav_bookmark_inactive
     )
 

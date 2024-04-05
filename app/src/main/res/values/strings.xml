@@ -8,6 +8,15 @@
     <string name="start_cooking">Start cooking</string>
     <string name="find_best_recipe_with_line_break">Find best recipes\nfor cooking</string>
 
+    //Auth
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="sign_in_as_guest">Sign In as Guest</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="loading">Loading</string>
+
     // Home Screen
     <string name="search_hint">Search recipes</string>
     <string name="popular_category">Popular category</string>
@@ -33,6 +42,11 @@
 
     //Search
     <string name="search_recipe">Search recipes</string>
+    <string name="no_matches">No matches found</string>
+
+    //Recipe
+    <string name="time">Time</string>
+    <string name="mins">&#160;Mins</string>
 
     //Profile
     <string name="my_profile">My profile</string>
@@ -44,4 +58,7 @@
     <string name="wrong_cred">Wrong email or password</string>
     <string name="enter_valid_cred">Enter a valid email address and password</string>
     <string name="input_empty">Input cannot be empty</string>
+    <string name="auth_failed">Authentication failed</string>
+    <string name="password_long">Password must be longer than 6 symbols</string>
+    <string name="email_already_taken">Email already taken</string>
 </resources>

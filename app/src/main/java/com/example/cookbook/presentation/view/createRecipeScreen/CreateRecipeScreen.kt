@@ -42,13 +42,14 @@ import com.example.cookbook.data.model.Ingredient
 import com.example.cookbook.data.model.RecipeModel
 import com.example.cookbook.navigation.Screen
 import com.example.cookbook.presentation.view.common.ErrorText
-import com.example.cookbook.presentation.view.common.recipe.RecipeImagePickerBox
+import com.example.cookbook.presentation.view.common.TextHeader
+import com.example.cookbook.presentation.view.common.TextMedium
 import com.example.cookbook.presentation.view.common.TypeDropDownMenu
+import com.example.cookbook.presentation.view.common.checkRecipeForError
+import com.example.cookbook.presentation.view.common.recipe.RecipeImagePickerBox
 import com.example.cookbook.presentation.view.createRecipeScreen.components.IngredientTextField
 import com.example.cookbook.presentation.view.createRecipeScreen.components.StepsTextField
 import com.example.cookbook.presentation.view.createRecipeScreen.createRecipeUiEvent.CreateRecipeUiEvent
-import com.example.cookbook.presentation.view.common.TextHeader
-import com.example.cookbook.presentation.view.common.checkRecipeForError
 import com.example.cookbook.ui.theme.PrimaryRed50
 import com.example.cookbook.ui.theme.TertiaryGray10
 import com.example.cookbook.ui.theme.TertiaryGray30
@@ -125,9 +126,9 @@ fun CreateRecipeScreen(
                             viewModel.postUiEvent(CreateRecipeUiEvent.ChangeErrorStatus(false))
                         } else {
                             viewModel.postUiEvent(CreateRecipeUiEvent.ChangeErrorValue(""))
-                            selectedImageUri?.let {
-                                viewModel.addPhotoToFirebaseStorage(
-                                    uri = it, RecipeModel(
+                            viewModel.postUiEvent(
+                                CreateRecipeUiEvent.AddToFirebaseStorage(
+                                    uri = selectedImageUri, RecipeModel(
                                         name = uiState.recipeNameTextFieldValue,
                                         description = uiState.recipeDescTextFieldValue,
                                         ingredientsList = uiState.listOfIngredients,
@@ -136,7 +137,7 @@ fun CreateRecipeScreen(
                                         type = uiState.selectedMenuItem
                                     )
                                 )
-                            }
+                            )
                             navController.navigate(Screen.Home.route)
                         }
                     }
@@ -241,15 +242,16 @@ fun CreateRecipeScreen(
                         .background(Color.White, shape = RoundedCornerShape(5.dp))
                         .padding(4.dp)
                 )
-                Text(
+                TextMedium(
                     text = stringResource(id = R.string.cook_time),
-                    style = Typography.bodyMedium,
+                    color = null,
                     fontWeight = FontWeight.SemiBold
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                Text(
-                    text = uiState.selectedTimeInSeconds.seconds.inWholeMinutes.toString() + " min",
-                    style = Typography.bodyMedium,
+                TextMedium(
+                    text = uiState.selectedTimeInSeconds.seconds.inWholeMinutes.toString() + stringResource(
+                        id = R.string.mins
+                    ),
                     color = TertiaryGray30
                 )
                 Icon(
@@ -292,9 +294,9 @@ fun CreateRecipeScreen(
                         .background(Color.White, shape = RoundedCornerShape(5.dp))
                         .padding(4.dp)
                 )
-                Text(
-                    text = "Type of Recipe",
-                    style = Typography.bodyMedium,
+                TextMedium(
+                    text = stringResource(id = R.string.type_recipe),
+                    color = null,
                     fontWeight = FontWeight.SemiBold
                 )
                 Spacer(modifier = Modifier.weight(1f))
@@ -334,13 +336,11 @@ fun CreateRecipeScreen(
                         .size(24.dp)
                         .padding(end = 4.dp)
                 )
-                Text(
+                TextMedium(
                     text = stringResource(id = R.string.add_new_ingredient),
-                    style = Typography.bodyMedium,
-                    color = TertiaryGray90
+                    color = null
                 )
             }
-
         }
 
         item {
@@ -383,10 +383,9 @@ fun CreateRecipeScreen(
                         .size(24.dp)
                         .padding(end = 4.dp)
                 )
-                Text(
+                TextMedium(
                     text = stringResource(id = R.string.add_new_step),
-                    style = Typography.bodyMedium,
-                    color = TertiaryGray90
+                    color = null
                 )
             }
         }
@@ -398,6 +397,5 @@ fun CreateRecipeScreen(
                 modifier = Modifier
             )
         }
-
     }
 }

@@ -14,11 +14,11 @@ import androidx.navigation.NavHostController
 import com.example.cookbook.data.model.Response
 import com.example.cookbook.domain.Recipes
 import com.example.cookbook.presentation.view.common.search.NoSearchResults
-import com.example.cookbook.presentation.view.common.search.rememberSearchState
 import com.example.cookbook.presentation.view.common.search.SearchBar
 import com.example.cookbook.presentation.view.common.search.SearchDisplay
 import com.example.cookbook.presentation.view.common.search.SearchState
-import kotlinx.coroutines.delay
+import com.example.cookbook.presentation.view.common.search.rememberSearchState
+import com.example.cookbook.presentation.view.searchScreen.searchUiEvent.SearchUiEvent
 
 @Composable
 fun SearchScreen(
@@ -30,7 +30,9 @@ fun SearchScreen(
     val state: SearchState = rememberSearchState()
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(start = 20.dp, end = 20.dp, top = 12.dp, bottom = 60.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(start = 20.dp, end = 20.dp, top = 12.dp, bottom = 60.dp)
     ) {
 
         SearchBar(
@@ -44,19 +46,18 @@ fun SearchScreen(
         )
 
         LaunchedEffect(state.query.text) {
-            viewModel.getSearchedRecipe(state.query.text)
+            viewModel.postUiEvent(SearchUiEvent.GetSearchedRecipe(state.query.text))
             state.searching = true
-            delay(100)
             when (viewModel.uiState.value.searchedRecipeResponse) {
-                is Response.Loading -> print("loading")
-                is Response.Success -> state.searchResults = (uiState.value.searchedRecipeResponse as Response.Success<Recipes>).data
+                is Response.Loading -> {}
+                is Response.Success -> state.searchResults =
+                    (uiState.value.searchedRecipeResponse as Response.Success<Recipes>).data
                 is Response.Failure -> print((uiState.value.searchedRecipeResponse as Response.Failure).e)
             }
             state.searching = false
         }
 
         when (state.searchDisplay) {
-
             SearchDisplay.InitialResults -> {
                 SearchInitialResults(
                     recipeResponse = uiState.value.recipeResponse,
@@ -68,16 +69,12 @@ fun SearchScreen(
                 NoSearchResults()
             }
 
-            SearchDisplay.Suggestions -> {
-
-            }
-
             SearchDisplay.Results -> {
                 SearchInitialContent(
                     recipes = state.searchResults,
-                    navController = navHostController)
+                    navController = navHostController
+                )
             }
         }
-
     }
 }

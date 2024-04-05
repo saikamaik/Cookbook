@@ -81,7 +81,5 @@ fun UserPhotoPickerBox(
                 tint = TertiaryGray70
             )
         }
-
     }
-
 }

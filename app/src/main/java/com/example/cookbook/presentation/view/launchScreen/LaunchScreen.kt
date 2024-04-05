@@ -27,6 +27,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.cookbook.R
 import com.example.cookbook.navigation.Screen
+import com.example.cookbook.presentation.view.common.TextMedium
 import com.example.cookbook.presentation.view.launchScreen.components.BoxGradient
 import com.example.cookbook.ui.theme.PrimaryRed50
 import com.example.cookbook.ui.theme.Typography
@@ -69,10 +70,8 @@ fun LaunchScreen(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
             )
-            Text(
+            TextMedium(
                 text = stringResource(id = R.string.find_best_recipies),
-                style = Typography.bodyMedium,
-                fontWeight = FontWeight.Normal,
                 color = Color.White,
                 modifier = Modifier
                     .padding(top = 20.dp)
@@ -93,9 +92,8 @@ fun LaunchScreen(
                     .clip(RoundedCornerShape(10.dp)),
                 colors = ButtonDefaults.buttonColors(PrimaryRed50)
             ) {
-                Text(
+                TextMedium(
                     text = stringResource(id = R.string.start_cooking),
-                    style = Typography.bodyMedium,
                     fontWeight = FontWeight.Bold,
                     color = Color.White,
                     modifier = Modifier

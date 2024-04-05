@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -39,6 +40,7 @@ import com.example.cookbook.data.model.Response
 import com.example.cookbook.navigation.Screen
 import com.example.cookbook.presentation.view.authScreens.signInScreen.signInUiEvent.SignInUiEvent
 import com.example.cookbook.presentation.view.common.ErrorText
+import com.example.cookbook.presentation.view.common.TextMedium
 import com.example.cookbook.ui.theme.NoRippleTheme
 import com.example.cookbook.ui.theme.PrimaryRed50
 import com.example.cookbook.ui.theme.TertiaryGray30
@@ -67,7 +69,7 @@ fun SignInScreen(
     ) {
 
         Text(
-            text = "Sign In",
+            text = stringResource(id = R.string.sign_in),
             style = Typography.bodyLarge,
             fontWeight = FontWeight.SemiBold,
             color = PrimaryRed50,
@@ -91,10 +93,9 @@ fun SignInScreen(
                 )
             },
             placeholder = {
-                Text(
-                    text = "Email",
-                    color = TertiaryGray30,
-                    style = Typography.bodyMedium
+                TextMedium(
+                    text = stringResource(id = R.string.email),
+                    color = TertiaryGray30
                 )
             },
             shape = RoundedCornerShape(20),
@@ -138,10 +139,9 @@ fun SignInScreen(
                 }
             },
             placeholder = {
-                Text(
-                    text = "Password",
-                    color = TertiaryGray30,
-                    style = Typography.bodyMedium
+                TextMedium(
+                    text = stringResource(id = R.string.password),
+                    color = TertiaryGray30
                 )
             },
             shape = RoundedCornerShape(20),
@@ -178,6 +178,7 @@ fun SignInScreen(
                                             }
                                         }
                                     }
+
                                     is Response.Failure -> {
                                         Toast.makeText(
                                             context,
@@ -185,10 +186,11 @@ fun SignInScreen(
                                             Toast.LENGTH_SHORT
                                         ).show()
                                     }
+
                                     is Response.Loading -> {
                                         Toast.makeText(
                                             context,
-                                            "Loading",
+                                            getString(context, R.string.loading),
                                             Toast.LENGTH_SHORT
                                         ).show()
                                     }
@@ -209,13 +211,10 @@ fun SignInScreen(
                 shape = RoundedCornerShape(20),
                 modifier = Modifier.padding(bottom = 6.dp, top = 6.dp)
             ) {
-
-                Text(
-                    text = "Sign In",
-                    style = Typography.bodyMedium,
+                TextMedium(
+                    text = stringResource(id = R.string.sign_in),
                     color = Color.White
                 )
-
             }
 
             TextButton(
@@ -224,15 +223,11 @@ fun SignInScreen(
                 },
                 modifier = Modifier.padding(bottom = 6.dp, top = 6.dp)
             ) {
-
-                Text(
-                    text = "Sign Up",
-                    style = Typography.bodyMedium,
+                TextMedium(
+                    text = stringResource(id = R.string.sign_up),
                     color = PrimaryRed50
                 )
-
             }
         }
-
     }
 }

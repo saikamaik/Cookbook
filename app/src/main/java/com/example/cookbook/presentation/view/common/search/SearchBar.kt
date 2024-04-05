@@ -37,7 +37,6 @@ fun SearchBar(
     ) {
 
         AnimatedVisibility(visible = focused) {
-            // Back button
             IconButton(
                 modifier = Modifier.padding(start = 2.dp),
                 onClick = {

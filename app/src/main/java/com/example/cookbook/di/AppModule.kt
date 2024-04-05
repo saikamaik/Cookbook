@@ -15,7 +15,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -31,18 +30,13 @@ object AppModule {
     fun provideAuthRef() = Firebase.auth
 
     @Provides
-    fun provideRecipeRepository(): RecipeRepository = RecipeRepositoryImpl(provideFirebaseRef())
+    fun provideRecipeRepository(): RecipeRepository =
+        RecipeRepositoryImpl(provideFirebaseRef(), provideAuthRef())
 
     @Provides
     fun provideAuthRepository(
         authRef: FirebaseAuth,
         @ApplicationContext appContext: Context
-    ): AuthRepository = AuthRepositoryImpl(authRef, provideFirebaseRef(),  appContext)
-
-    @Provides
-    @Singleton
-    fun provideApplicationContext(@ApplicationContext appContext: Context): Context {
-        return appContext
-    }
+    ): AuthRepository = AuthRepositoryImpl(authRef, provideFirebaseRef(), appContext)
 
 }

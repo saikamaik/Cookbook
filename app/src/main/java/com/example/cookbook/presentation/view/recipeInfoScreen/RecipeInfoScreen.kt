@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -35,12 +34,12 @@ import coil.compose.AsyncImage
 import com.example.cookbook.R
 import com.example.cookbook.presentation.view.common.TextHeader
 import com.example.cookbook.presentation.view.common.TextHeader4
+import com.example.cookbook.presentation.view.common.TextMedium
 import com.example.cookbook.ui.theme.PrimaryRed50
 import com.example.cookbook.ui.theme.TertiaryGray10
 import com.example.cookbook.ui.theme.TertiaryGray30
 import com.example.cookbook.ui.theme.TertiaryGray70
 import com.example.cookbook.ui.theme.TertiaryGray90
-import com.example.cookbook.ui.theme.Typography
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
@@ -107,9 +106,8 @@ fun RecipeInfoScreen(
                             .size(60.dp, 60.dp)
                             .background(TertiaryGray10)
                     )
-                    Text(
+                    TextMedium(
                         text = uiState.value.user.username,
-                        style = Typography.bodyMedium,
                         color = TertiaryGray90,
                         modifier = Modifier.align(Alignment.CenterVertically)
                     )
@@ -124,9 +122,8 @@ fun RecipeInfoScreen(
                     header = stringResource(id = R.string.description),
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
-                Text(
+                TextMedium(
                     text = uiState.value.recipe.description.toString(),
-                    style = Typography.bodyMedium,
                     color = TertiaryGray70
                 )
 
@@ -146,15 +143,14 @@ fun RecipeInfoScreen(
                             .background(Color.White, shape = RoundedCornerShape(5.dp))
                             .padding(4.dp)
                     )
-                    Text(
+                    TextMedium(
                         text = stringResource(id = R.string.cook_time),
-                        style = Typography.bodyMedium,
+                        color = null,
                         fontWeight = FontWeight.SemiBold
                     )
                     Spacer(modifier = Modifier.weight(1f))
-                    Text(
+                    TextMedium(
                         text = uiState.value.recipe.cookTime?.seconds?.inWholeMinutes.toString() + " min",
-                        style = Typography.bodyMedium,
                         color = TertiaryGray30
                     )
                 }
@@ -174,15 +170,14 @@ fun RecipeInfoScreen(
                             .background(Color.White, shape = RoundedCornerShape(5.dp))
                             .padding(4.dp)
                     )
-                    Text(
+                    TextMedium(
                         text = stringResource(id = R.string.type_recipe),
-                        style = Typography.bodyMedium,
+                        color = null,
                         fontWeight = FontWeight.SemiBold
                     )
                     Spacer(modifier = Modifier.weight(1f))
-                    Text(
+                    TextMedium(
                         text = uiState.value.recipe.type.toString(),
-                        style = Typography.bodyMedium,
                         color = TertiaryGray30
                     )
                 }
@@ -196,9 +191,8 @@ fun RecipeInfoScreen(
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                Text(
+                TextMedium(
                     text = uiState.value.recipe.ingredientsList.size.toString() + " items",
-                    style = Typography.bodyMedium,
                     color = TertiaryGray30
                 )
 
@@ -207,7 +201,6 @@ fun RecipeInfoScreen(
         }
 
         items(uiState.value.recipe.ingredientsList) {
-
             Row(
                 modifier = Modifier
                     .padding(bottom = 16.dp)
@@ -216,16 +209,14 @@ fun RecipeInfoScreen(
                     .padding(top = 12.dp, bottom = 12.dp, start = 12.dp, end = 12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
+                TextMedium(
                     text = it.name.toString(),
-                    style = Typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
                     color = TertiaryGray90
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                Text(
+                TextMedium(
                     text = it.amount.toString(),
-                    style = Typography.bodyMedium,
                     color = TertiaryGray30
                 )
             }
@@ -233,18 +224,14 @@ fun RecipeInfoScreen(
         }
 
         item {
-
-            Row(
-            ) {
-
+            Row {
                 TextHeader(
                     header = stringResource(id = R.string.steps),
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                Text(
+                TextMedium(
                     text = uiState.value.recipe.stepsList.size.toString() + " steps",
-                    style = Typography.bodyMedium,
                     color = TertiaryGray30
                 )
 
@@ -262,15 +249,13 @@ fun RecipeInfoScreen(
                     .padding(top = 12.dp, bottom = 12.dp, start = 12.dp, end = 12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
+                TextMedium(
                     text = "Step " + (index + 1) + ". ",
-                    style = Typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
                     color = TertiaryGray90
                 )
-                Text(
+                TextMedium(
                     text = item,
-                    style = Typography.bodyMedium,
                     color = TertiaryGray70
                 )
             }

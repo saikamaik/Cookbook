@@ -18,5 +18,7 @@ interface RecipeRepository {
     fun getSearchedRecipes(query: String): Flow<RecipeResponse>
     suspend fun updateRecipe(recipe: RecipeModel): UpdateRecipeResponse
     fun addRecipeToBookmark(recipeId: String, userId: String): Flow<Response<Boolean>>
+    fun getAllBookmarkedRecipes(userId: String): Flow<RecipeResponse>
+    fun deleteBookmarkRecipe(recipeId: String)
 
 }

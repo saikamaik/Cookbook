@@ -21,11 +21,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.cookbook.R
+import com.example.cookbook.navigation.Screen
 import com.example.cookbook.presentation.view.common.TextHeader4
 import com.example.cookbook.presentation.view.common.recipe.Recipes
 import com.example.cookbook.presentation.view.profileScreen.components.UserRecipeContent
@@ -50,7 +52,7 @@ fun ProfileScreen(
         ) {
 
             TextHeader4(
-                header = "My profile",
+                header = stringResource(id = R.string.my_profile),
                 modifier = Modifier
                     .align(Alignment.Start)
                     .padding(bottom = 20.dp)
@@ -90,10 +92,11 @@ fun ProfileScreen(
                 Text(
                     text = it,
                     style = Typography.labelMedium,
-                    color = TertiaryGray90
+                    color = TertiaryGray90,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.padding(top = 6.dp)
                 )
             }
-
         }
 
         HorizontalDivider(
@@ -109,7 +112,7 @@ fun ProfileScreen(
                     recipes = recipes,
                     navHostController = navHostController
                 ) {
-
+                    navHostController.navigate(Screen.RecipeInfo.route + "/${it}")
                 }
             }
         )

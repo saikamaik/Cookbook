@@ -4,7 +4,9 @@ import android.content.Context
 import android.net.Uri
 import android.util.Patterns
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getString
 import androidx.lifecycle.ViewModel
+import com.example.cookbook.R
 import com.example.cookbook.data.model.UserModel
 import com.example.cookbook.presentation.view.authScreens.signUpScreen.signUpUiEvent.SignUpUiEvent
 import com.example.cookbook.presentation.view.authScreens.signUpScreen.signUpUiState.SignUpUiState
@@ -40,7 +42,6 @@ class SignUpViewModel @Inject constructor(
                 event.password,
                 event.username
             )
-
             is SignUpUiEvent.ChangeErrorStatus -> changeErrorStatus(event.status)
             is SignUpUiEvent.ChangeUserNameTextValue -> changeUserNameTextValue(event.username)
             is SignUpUiEvent.ChangePasswordVisibility -> changePasswordVisibility()
@@ -87,24 +88,24 @@ class SignUpViewModel @Inject constructor(
         if (email?.let { Patterns.EMAIL_ADDRESS.matcher(it).matches() } == true) {
             Toast.makeText(
                 appContext,
-                "Enter a valid email address and password",
+                getString(appContext, R.string.enter_valid_cred),
                 Toast.LENGTH_SHORT
             ).show()
-            changeSignUpResponse("Enter a valid email address and password")
+            changeSignUpResponse(getString(appContext, R.string.enter_valid_cred))
             return false
         } else if (password != null) {
             if (password.length < 6) {
                 Toast.makeText(
                     appContext,
-                    "Password must be longer than 6 symbols",
+                    getString(appContext, R.string.password_long),
                     Toast.LENGTH_SHORT
                 ).show()
-                changeSignUpResponse("Enter a valid email address and password")
+                changeSignUpResponse(getString(appContext, R.string.enter_valid_cred))
                 return false
             }
         }
         if (username == null) {
-            changeSignUpResponse("Enter a valid username address and password")
+            changeSignUpResponse(getString(appContext, R.string.enter_valid_cred))
             return false
         }
         return true
@@ -118,7 +119,7 @@ class SignUpViewModel @Inject constructor(
             }
             auth.currentUser!!.updateProfile(profileUpdates)
         } catch (e: FirebaseAuthUserCollisionException) {
-            changeSignUpResponse("Email already taken")
+            changeSignUpResponse(getString(appContext, R.string.email_already_taken))
         } catch (e: Exception) {
             changeSignUpResponse(e.toString())
         }

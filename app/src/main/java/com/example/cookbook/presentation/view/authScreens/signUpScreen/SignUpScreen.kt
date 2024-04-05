@@ -30,16 +30,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.getString
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.cookbook.R
 import com.example.cookbook.navigation.Screen
 import com.example.cookbook.presentation.view.authScreens.signUpScreen.signUpUiEvent.SignUpUiEvent
 import com.example.cookbook.presentation.view.common.ErrorText
+import com.example.cookbook.presentation.view.common.TextMedium
 import com.example.cookbook.ui.theme.NoRippleTheme
 import com.example.cookbook.ui.theme.PrimaryRed50
 import com.example.cookbook.ui.theme.TertiaryGray30
@@ -51,8 +54,6 @@ fun SignUpScreen(
     navController: NavHostController,
     @ApplicationContext context: Context
 ) {
-
-//  аутлайнтекстфилд (почта, юзернейм, пароль, конфирм пароль), валидация и кнопка регистрации
 
     val viewModel: SignUpViewModel = hiltViewModel()
     val uiState = viewModel.uiState.collectAsState()
@@ -80,7 +81,7 @@ fun SignUpScreen(
     ) {
 
         Text(
-            text = "Sign Up",
+            text = stringResource(id = R.string.sign_up),
             style = Typography.bodyLarge,
             fontWeight = FontWeight.SemiBold,
             color = PrimaryRed50,
@@ -109,10 +110,9 @@ fun SignUpScreen(
                 )
             },
             placeholder = {
-                Text(
-                    text = "Email",
-                    color = TertiaryGray30,
-                    style = Typography.bodyMedium
+                TextMedium(
+                    text = stringResource(id = R.string.email),
+                    color = TertiaryGray30
                 )
             },
             shape = RoundedCornerShape(20),
@@ -142,10 +142,9 @@ fun SignUpScreen(
                 )
             },
             placeholder = {
-                Text(
-                    text = "Username",
-                    color = TertiaryGray30,
-                    style = Typography.bodyMedium
+                TextMedium(
+                    text = stringResource(id = R.string.username),
+                    color = TertiaryGray30
                 )
             },
             shape = RoundedCornerShape(20),
@@ -189,10 +188,9 @@ fun SignUpScreen(
                 }
             },
             placeholder = {
-                Text(
-                    text = "Password",
-                    color = TertiaryGray30,
-                    style = Typography.bodyMedium
+                TextMedium(
+                    text = stringResource(id = R.string.password),
+                    color = TertiaryGray30
                 )
             },
             shape = RoundedCornerShape(20),
@@ -242,20 +240,17 @@ fun SignUpScreen(
                         }
                     } else {
                         viewModel.postUiEvent(SignUpUiEvent.ChangeErrorStatus(true))
-                        viewModel.postUiEvent(SignUpUiEvent.ChangeErrorValue("Input cannot be empty"))
+                        viewModel.postUiEvent(SignUpUiEvent.ChangeErrorValue(getString(context, R.string.input_empty)))
                     }
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = PrimaryRed50
                 )
             ) {
-
-                Text(
-                    text = "Sign Up",
-                    style = Typography.bodyMedium,
+                TextMedium(
+                    text = stringResource(id = R.string.sign_up),
                     color = Color.White
                 )
-
             }
 
             TextButton(
@@ -263,16 +258,11 @@ fun SignUpScreen(
                     navController.navigate(Screen.SignIn.route)
                 }
             ) {
-
-                Text(
-                    text = "Sign In",
-                    style = Typography.bodyMedium,
+                TextMedium(
+                    text = stringResource(id = R.string.sign_in),
                     color = PrimaryRed50
                 )
-
             }
         }
     }
-
-
 }

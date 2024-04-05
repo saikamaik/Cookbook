@@ -64,6 +64,7 @@ fun Navigation(
         }
         composable(Screen.Bookmark.route) {
             BookMarkScreen(
+                navController
             )
         }
         composable(Screen.CreateRecipe.route) {

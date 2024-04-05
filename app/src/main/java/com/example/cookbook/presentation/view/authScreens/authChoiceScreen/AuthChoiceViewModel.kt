@@ -2,7 +2,9 @@ package com.example.cookbook.presentation.view.authScreens.authChoiceScreen
 
 import android.content.Context
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getString
 import androidx.lifecycle.ViewModel
+import com.example.cookbook.R
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -20,7 +22,7 @@ class AuthChoiceViewModel @Inject constructor(
                 if (!task.isSuccessful) {
                     Toast.makeText(
                         appContext,
-                        "Authentication failed.",
+                        getString(appContext, R.string.auth_failed),
                         Toast.LENGTH_SHORT,
                     ).show()
                 }

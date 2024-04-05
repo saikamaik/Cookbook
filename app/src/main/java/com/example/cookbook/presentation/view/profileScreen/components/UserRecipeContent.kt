@@ -17,7 +17,7 @@ import com.example.cookbook.presentation.view.common.recipe.RecipeCard
 fun UserRecipeContent(
     recipes: Recipes,
     navHostController: NavHostController,
-    onClick: () -> Unit
+    onClick: (String) -> Unit
 ) {
 
     LazyVerticalGrid(
@@ -33,7 +33,7 @@ fun UserRecipeContent(
                 recipeModel = recipe,
                 navHostController
             ) {
-                onClick()
+                onClick(it)
             }
         }
     }

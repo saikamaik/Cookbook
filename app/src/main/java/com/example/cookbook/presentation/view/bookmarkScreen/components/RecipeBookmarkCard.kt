@@ -1,4 +1,4 @@
-package com.example.cookbook.presentation.view.bookmarkScreen
+package com.example.cookbook.presentation.view.bookmarkScreen.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,40 +18,44 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.cookbook.R
 import com.example.cookbook.data.model.RecipeModel
+import com.example.cookbook.navigation.Screen
+import com.example.cookbook.presentation.view.common.TextMedium
 import com.example.cookbook.ui.theme.TertiaryGray10
-import com.example.cookbook.ui.theme.TertiaryGray90
-import com.example.cookbook.ui.theme.Typography
 
 @Composable
 fun RecipeBookmarkCard(
     recipe: RecipeModel,
-    onClick: () -> Unit
+    navHostController: NavHostController,
+    onClick: (String) -> Unit
 ) {
 
-    Column(
-
-    ) {
-
+    Column {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(10.dp))
                 .height(200.dp)
                 .background(TertiaryGray10)
+                .clickable {
+                    navHostController.navigate(Screen.RecipeInfo.route + "/${recipe.id}")
+                }
         ) {
 
             AsyncImage(
                 model = recipe.imageUrl,
-                contentDescription = "",
+                contentDescription = null,
                 clipToBounds = true,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxSize()
             )
+
             Icon(
                 painter = painterResource(id = R.drawable.ic_bottomnav_bookmark_active),
                 contentDescription = null,
@@ -64,19 +67,19 @@ fun RecipeBookmarkCard(
                     .background(color = Color.White, shape = RoundedCornerShape(50.dp))
                     .padding(6.dp)
                     .clickable {
-                        onClick()
+                        onClick(recipe.id)
                     }
             )
 
         }
 
-        Text(
+        TextMedium(
             text = recipe.name,
-            style = Typography.bodyMedium,
-            color = TertiaryGray90,
-            modifier = Modifier.align(Alignment.Start)
+            fontWeight = FontWeight.SemiBold,
+            color = null,
+            modifier = Modifier
+                .align(Alignment.Start)
+                .padding(start = 4.dp, top = 4.dp)
         )
-
     }
-
 }

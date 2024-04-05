@@ -6,6 +6,7 @@ import com.example.cookbook.data.model.SavedRecipesModel
 import com.example.cookbook.domain.AddRecipeResponse
 import com.example.cookbook.domain.RecipeRepository
 import com.example.cookbook.domain.RecipeResponse
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.FirebaseFirestore
@@ -18,7 +19,8 @@ import javax.inject.Singleton
 
 @Singleton
 class RecipeRepositoryImpl @Inject constructor(
-    private val recipeRef: FirebaseFirestore
+    private val recipeRef: FirebaseFirestore,
+    private val auth: FirebaseAuth
 ) : RecipeRepository {
 
     override suspend fun addRecipe(recipe: RecipeModel): AddRecipeResponse = try {
@@ -43,10 +45,10 @@ class RecipeRepositoryImpl @Inject constructor(
                 }
                 trySend(recipeResponse)
             }
+
         awaitClose {
             snapshotListener.remove()
         }
-
     }
 
     override fun getOneRecipe(id: String): Flow<RecipeModel> = callbackFlow {
@@ -90,9 +92,9 @@ class RecipeRepositoryImpl @Inject constructor(
         awaitClose {
             close()
         }
-
     }
 
+        //пока не используется
     override suspend fun updateRecipe(recipe: RecipeModel) = try {
         recipeRef.document(recipe.name).set(recipe).await()
         Response.Success(true)
@@ -102,13 +104,65 @@ class RecipeRepositoryImpl @Inject constructor(
 
     override fun addRecipeToBookmark(recipeId: String, userId: String): Flow<Response<Boolean>> =
         callbackFlow {
+            val bookmarkRecipe = SavedRecipesModel(userId = userId, recipeId = recipeId)
             try {
-                recipeRef.collection("saved_recipe").add(SavedRecipesModel(userId, recipeId))
+                recipeRef.collection("saved_recipe").add(bookmarkRecipe)
                     .await()
                 Response.Success(true)
             } catch (e: Exception) {
                 Response.Failure(e.message)
             }
+
+            awaitClose {
+                close()
+            }
         }
+
+    override fun getAllBookmarkedRecipes(userId: String): Flow<RecipeResponse> = callbackFlow {
+
+        recipeRef.collection("saved_recipe")
+            .whereEqualTo("userId", userId)
+            .get()
+            .addOnSuccessListener { documents ->
+                val savedRecipeList = documents?.toObjects(SavedRecipesModel::class.java)
+                if (savedRecipeList != null) {
+                    val list = savedRecipeList.map {
+                        it.recipeId
+                    }
+                    recipeRef.collection("recipe")
+                        .whereIn(FieldPath.documentId(), list)
+                        .get()
+                        .addOnSuccessListener { recipesDocuments ->
+                            val recipes = recipesDocuments?.toObjects(RecipeModel::class.java)
+                            if (recipes != null) {
+                                trySend(Response.Success(recipes))
+                            }
+                        }
+                }
+            }
+
+        awaitClose {
+            close()
+        }
+    }
+
+    override fun deleteBookmarkRecipe(recipeId: String) {
+
+        recipeRef.collection("saved_recipe")
+            .where(Filter.and(
+                Filter.equalTo("userId", auth.currentUser?.uid),
+                Filter.equalTo("recipeId", recipeId)
+            ))
+            .get()
+            .addOnSuccessListener { documents ->
+                val deletedRecipes = documents?.toObjects(SavedRecipesModel::class.java)
+
+                if (deletedRecipes != null){
+                    for (recipe in deletedRecipes) {
+                        recipeRef.collection("saved_recipe").document(recipe.id).delete()
+                    }
+                }
+            }
+    }
 
 }

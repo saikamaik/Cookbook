@@ -10,7 +10,6 @@ fun rememberSearchState(
     query: TextFieldValue = TextFieldValue(""),
     focused: Boolean = false,
     searching: Boolean = false,
-    suggestions: List<String> = emptyList(),
     searchResults: List<RecipeModel> = emptyList()
 ): SearchState {
     return remember {
@@ -18,7 +17,6 @@ fun rememberSearchState(
             query = query,
             focused = focused,
             searching = searching,
-            suggestions = suggestions,
             searchResults = searchResults
         )
     }

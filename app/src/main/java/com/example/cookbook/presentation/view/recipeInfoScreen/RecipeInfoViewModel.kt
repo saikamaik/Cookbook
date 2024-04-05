@@ -25,7 +25,6 @@ class RecipeInfoViewModel @Inject constructor(
         MutableStateFlow(RecipeInfoUiState())
     var uiState: StateFlow<RecipeInfoUiState> = _uiState
 
-    //uiState
     init {
         getOneRecipe(argument)
     }
@@ -41,5 +40,4 @@ class RecipeInfoViewModel @Inject constructor(
             }
         }
     }
-
 }

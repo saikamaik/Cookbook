@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -14,6 +15,7 @@ import com.example.cookbook.R
 import com.example.cookbook.presentation.view.common.TextHeader4
 import com.example.cookbook.presentation.view.homeScreen.sections.PopularCategory
 import com.example.cookbook.presentation.view.homeScreen.sections.RecentCategory
+import com.example.cookbook.presentation.view.homeScreen.uiEvent.HomeUiEvent
 
 @Composable
 fun HomeScreen(
@@ -21,6 +23,7 @@ fun HomeScreen(
 ) {
 
     val viewModel: HomeViewModel = hiltViewModel()
+    val uiState = viewModel.uiState.collectAsState()
 
     Column(
         modifier = Modifier
@@ -33,15 +36,19 @@ fun HomeScreen(
                 .padding(bottom = 16.dp)
         )
         PopularCategory(
-            viewModel = viewModel, navHostController
+            uiState.value.recipeResponse,
+            viewModel,
+            navHostController,
+            onClick = { recipeId ->
+                viewModel.postUiEvent(HomeUiEvent.AddRecipeToBookMark(recipeId))
+            }
         )
         RecentCategory(
-            viewModel.recipeResponse,
+            uiState.value.recipeResponse,
             navHostController = navHostController,
-            onClick = {recipeId ->
-                viewModel.addRecipeToBookmark(recipeId)
+            onClick = { recipeId ->
+                viewModel.postUiEvent(HomeUiEvent.AddRecipeToBookMark(recipeId))
             }
         )
     }
-
 }

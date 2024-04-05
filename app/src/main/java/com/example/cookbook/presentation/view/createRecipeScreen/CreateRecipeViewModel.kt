@@ -40,6 +40,7 @@ class CreateRecipeViewModel @Inject constructor(
             is CreateRecipeUiEvent.ChangeSelectedMenuItem -> changeSelectedMenuItem(event.item)
             is CreateRecipeUiEvent.ChangeErrorValue -> changeErrorValue(event.errorValue)
             is CreateRecipeUiEvent.ChangeErrorStatus -> changeErrorStatus(event.value)
+            is CreateRecipeUiEvent.AddToFirebaseStorage -> addPhotoToFirebaseStorage(event.uri, event.recipe)
         }
     }
 
@@ -83,17 +84,25 @@ class CreateRecipeViewModel @Inject constructor(
         )
     }
 
-    fun addPhotoToFirebaseStorage(uri: Uri, recipe: RecipeModel) {
-        val riversRef = imageStorageReference.child("food_images/${uri.lastPathSegment}")
-        val uploadTask = riversRef.putFile(uri)
+    private fun addPhotoToFirebaseStorage(uri: Uri?, recipe: RecipeModel) {
+        if (uri != null) {
 
-        uploadTask.addOnFailureListener {
-            // Handle unsuccessful uploads
-        }.addOnSuccessListener { taskSnapshot ->
-            taskSnapshot.storage.downloadUrl.addOnSuccessListener {
-                _uiState.value = _uiState.value.copy(recipeImageUri = it.toString())
-                addRecipe(recipe)
+            viewModelScope.launch {
+                val riversRef = imageStorageReference.child("food_images/${uri.lastPathSegment}")
+                val uploadTask = riversRef.putFile(uri)
+
+                uploadTask.addOnFailureListener {
+                    // Handle unsuccessful uploads
+                }.addOnSuccessListener { taskSnapshot ->
+                    taskSnapshot.storage.downloadUrl.addOnSuccessListener {
+                        _uiState.value = _uiState.value.copy(recipeImageUri = it.toString())
+                        addRecipe(recipe)
+                    }
+                }
             }
+        } else {
+            _uiState.value = _uiState.value.copy(recipeImageUri = "")
+            addRecipe(recipe)
         }
     }
 

@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
@@ -97,10 +98,13 @@ fun RecipeCard(
 
                 Column {
                     Text(
-                        text = "Time", style = Typography.bodySmall, color = TertiaryGray30
+                        text = stringResource(id = R.string.time),
+                        style = Typography.bodySmall,
+                        color = TertiaryGray30
                     )
                     Text(
-                        text = recipeModel.cookTime?.seconds?.inWholeMinutes.toString() + " Mins",
+                        text = recipeModel.cookTime?.seconds?.inWholeMinutes.toString()
+                                + stringResource(id = R.string.mins),
                         style = Typography.bodySmall,
                         color = TertiaryGray90
                     )
